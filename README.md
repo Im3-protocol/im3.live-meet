@@ -1,5 +1,5 @@
 <a href="https://livekit.io/">
-  <img src="./.github/assets/livekit-mark.png" alt="LiveKit logo" width="100" height="100">
+  <img src="./public/images/im3.png" alt="im3 logo" width="100" height="100">
 </a>
 
 # LiveKit Meet
