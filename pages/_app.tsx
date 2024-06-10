@@ -8,20 +8,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo
-        title="LiveKit Meet | Conference app build with LiveKit Open Source"
+        title="IM3 Meet"
         titleTemplate="%s"
-        defaultTitle="LiveKit Meet | Conference app build with LiveKit open source"
-        description="LiveKit is an open source WebRTC project that gives you everything needed to build scalable and real-time audio and/or video experiences in your applications."
-        twitter={{
-          handle: '@livekitted',
-          site: '@livekitted',
-          cardType: 'summary_large_image',
-        }}
+        defaultTitle="IM3 Meet"
+        description="IM3 is an open source WebRTC project that gives you everything needed to build scalable and real-time audio and/or video experiences in your applications."
+        
         openGraph={{
-          url: 'https://meet.livekit.io',
+          url: 'https://meet.im3.live',
           images: [
             {
-              url: 'https://meet.livekit.io/images/livekit-meet-open-graph.png',
+              url: '/images/im3.svg',
               width: 2000,
               height: 1000,
               type: 'image/png',
@@ -38,16 +34,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         additionalLinkTags={[
           {
             rel: 'icon',
-            href: '/favicon.ico',
+            href: '/images/im3.svg',
           },
           {
             rel: 'apple-touch-icon',
-            href: '/images/livekit-apple-touch.png',
+            href: '/images/im3.svg',
             sizes: '180x180',
           },
           {
             rel: 'mask-icon',
-            href: '/images/livekit-safari-pinned-tab.svg',
+            href: '/images/im3.svg',
             color: '#070707',
           },
         ]}

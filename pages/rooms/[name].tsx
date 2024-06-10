@@ -55,7 +55,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>LiveKit Meet</title>
+        <title>im3 Meet</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
