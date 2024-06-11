@@ -5,7 +5,7 @@
 ### 1. Main Page
 
 #### Components:
-- **Title/Header:** "Welcome to MiniMeet"
+- **Title/Header:** "Welcome to IM3-Meet"
 - **Create Meeting Button:** "Create Meeting"
 - **Join Meeting Button:** "Join Meeting"
 
@@ -18,7 +18,7 @@
 **Main Page Layout:**
 ```
 --------------------------------------
-|            Welcome to MiniMeet     |
+|            Welcome to IM3-Meet     |
 |                                    |
 |          [Create Meeting]          |
 |                                    |
