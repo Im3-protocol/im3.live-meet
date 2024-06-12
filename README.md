@@ -1,144 +1,179 @@
-<a href="https://livekit.io/">
-  <img src="./public/images/im3.png" alt="im3 logo" width="100" height="100">
-</a>
 
-### 1. Main Page
+### User Flow Diagram
 
-#### Components:
-- **Title/Header:** "Welcome to IM3-Meet"
-- **Create Meeting Button:** "Create Meeting"
-- **Join Meeting Button:** "Join Meeting"
+**Web3 Login Page:**
+- User logs in using their Web3 wallet.
 
-#### Layout:
-- Centered title at the top.
-- Two large buttons centered on the page: one for creating a meeting and one for joining a meeting.
+**Main Page:**
+- User sees two buttons: "Create Meeting" and "Join Meeting".
 
----
+**1. Creating a Meeting:**
+- User clicks on the "Create Meeting" button.
+- The system generates a unique meeting URL.
+- The system displays the meeting URL to the user.
 
-**Main Page Layout:**
-```
---------------------------------------
-|            Welcome to IM3-Meet     |
-|                                    |
-|          [Create Meeting]          |
-|                                    |
-|          [Join Meeting]            |
---------------------------------------
-```
+**2. Joining a Meeting:**
+- User clicks on the "Join Meeting" button.
+- User is taken to a Join Meeting Page.
+- User enters the meeting URL.
+- User clicks "Join Meeting".
+- The system verifies the meeting URL.
+- If the URL is valid, the user is redirected to the Meeting Page.
+- If the URL is invalid, an error message is displayed.
 
 ---
 
-### 2. Create Meeting Page
+### Detailed User Flow
 
-#### Components:
-- **Title/Header:** "Create a New Meeting"
-- **Meeting Name Input Field:** Placeholder text "Enter meeting name"
-- **Generate Meeting Button:** "Generate Meeting"
+#### Web3 Login Page
+- **Components:**
+  - Title: "Welcome to IM3 Meet"
+  - Button: "Login with Wallet"
+- **Display:**
+  ```
+  --------------------------------------
+  |          Welcome to IM3 Meet       |
+  |                                    |
+  |         [Login with Wallet]        |
+  --------------------------------------
+  ```
+- **Action:**
+  - User clicks "Login with Wallet".
+  - User's Web3 wallet (e.g., MetaMask) is prompted to connect.
+- **System Response:**
+  - The system verifies the wallet connection.
+  - **If the wallet is connected successfully:**
+    - The user is redirected to the Main Page.
+  - **If the wallet connection fails:**
+    - An error message is displayed: "Failed to connect wallet. Please try again."
+  - **Error Display:**
+  ```
+  --------------------------------------
+  |          Welcome to IM3 Meet       |
+  |                                    |
+  |    [Failed to connect wallet.      |
+  |        Please try again.]          |
+  |         [Login with Wallet]        |
+  --------------------------------------
+  ```
 
-#### Layout:
-- Title at the top.
-- Input field for the meeting name.
-- Button to generate the meeting.
+#### Main Page
+- **Components:**
+  - Title: "Welcome to IM3 Meet"
+  - Button 1: "Create Meeting"
+  - Button 2: "Join Meeting"
+- **Display:**
+  ```
+  --------------------------------------
+  |          Welcome to IM3 Meet       |
+  |                                    |
+  |          [Create Meeting]          |
+  |                                    |
+  |          [Join Meeting]            |
+  --------------------------------------
+  ```
+
+#### 1. Create Meeting Flow
+- **Action:** User clicks "Create Meeting".
+- **System Response:**
+  - The system generates a unique meeting URL (e.g., `https://im3meet.com/meeting/12345`).
+  - The system displays the generated URL to the user.
+- **Display:**
+  ```
+  --------------------------------------
+  |          Your Meeting URL          |
+  |                                    |
+  | https://im3meet.com/meeting/12345  |
+  |                                    |
+  |     [Copy URL] [Back to Main]      |
+  --------------------------------------
+  ```
+
+#### 2. Join Meeting Flow
+- **Action:** User clicks "Join Meeting".
+- **System Response:**
+  - The user is redirected to the Join Meeting Page.
+- **Join Meeting Page:**
+  - **Components:**
+    - Title: "Join a Meeting"
+    - Input Field: "Enter meeting URL"
+    - Button: "Join Meeting"
+  - **Display:**
+  ```
+  --------------------------------------
+  |            Join a Meeting          |
+  |                                    |
+  |   [Enter meeting URL ___________]  |
+  |                                    |
+  |          [Join Meeting]            |
+  --------------------------------------
+  ```
+- **Action:**
+  - User enters the meeting URL.
+  - User clicks "Join Meeting".
+- **System Response:**
+  - The system verifies the meeting URL.
+  - **If the URL is valid:**
+    - The user is redirected to the Meeting Page.
+  - **If the URL is invalid:**
+    - An error message is displayed: "Invalid meeting URL. Please try again."
+  - **Error Display:**
+  ```
+  --------------------------------------
+  |            Join a Meeting          |
+  |                                    |
+  |   [Enter meeting URL ___________]  |
+  |                                    |
+  |  [Invalid meeting URL. Try again.] |
+  |          [Join Meeting]            |
+  --------------------------------------
+  ```
+
+#### Meeting Page
+- **Components:**
+  - Title: "Meeting: [Meeting Name or ID]"
+  - Video Display Area
+  - Participants List (Sidebar)
+  - Controls (Mute, Unmute, Video On/Off, End Call, Chat)
+- **Display:**
+  ```
+  ------------------------------------------------
+  | Meeting: [Meeting Name or ID]                |
+  |----------------------------------------------|
+  |                                              |
+  |      [Video Display Area]                    |
+  |                                              |
+  |----------------------------------------------|
+  | [Mute] [Unmute] [Video On/Off] [End Call] [Chat] |
+  ------------------------------------------------
+  | Participants:                                |
+  | - User1                                      |
+  | - User2                                      |
+  | - User3                                      |
+  ------------------------------------------------
+  ```
 
 ---
 
-**Create Meeting Page Layout:**
-```
---------------------------------------
-|        Create a New Meeting        |
-|                                    |
-|   [Enter meeting name __________]  |
-|                                    |
-|          [Generate Meeting]        |
---------------------------------------
-```
+### Summary of User Flow
 
----
+1. **Web3 Login Page:**
+   - User clicks "Login with Wallet".
+   - System verifies wallet connection.
+   - Successful connection → Redirect to Main Page.
+   - Failed connection → Display error message.
 
-### 3. Join Meeting Page
+2. **Main Page:**
+   - Two buttons: "Create Meeting" and "Join Meeting".
 
-#### Components:
-- **Title/Header:** "Join a Meeting"
-- **Meeting ID Input Field:** Placeholder text "Enter meeting ID"
-- **Join Meeting Button:** "Join Meeting"
+3. **Create Meeting:**
+   - Click "Create Meeting" → Generate URL → Display URL.
 
-#### Layout:
-- Title at the top.
-- Input field for the meeting ID.
-- Button to join the meeting.
+4. **Join Meeting:**
+   - Click "Join Meeting" → Input URL → Verify URL.
+   - Valid URL → Redirect to Meeting Page.
+   - Invalid URL → Display error message.
 
----
+5. **Meeting Page:**
+   - Video display, participant list, and controls.
 
-**Join Meeting Page Layout:**
-```
---------------------------------------
-|            Join a Meeting          |
-|                                    |
-|   [Enter meeting ID ____________]  |
-|                                    |
-|          [Join Meeting]            |
---------------------------------------
-```
-
----
-
-### 4. Meeting Page
-
-#### Components:
-- **Title/Header:** "Meeting: [Meeting Name]"
-- **Video Display Area:** Large central area for video feeds.
-- **Participants List:** Sidebar showing participants.
-- **Controls:** Mute, Unmute, Video On/Off, End Call, Chat.
-
-#### Layout:
-- Title at the top with the meeting name.
-- Large video display area in the center.
-- Sidebar on the right for participants.
-- Controls at the bottom.
-
----
-
-**Meeting Page Layout:**
-```
-------------------------------------------------
-| Meeting: [Meeting Name]                      |
-|----------------------------------------------|
-|                                              |
-|      [Video Display Area]                    |
-|                                              |
-|----------------------------------------------|
-| [Mute] [Unmute] [Video On/Off] [End Call] [Chat] |
-------------------------------------------------
-| Participants:                                |
-| - User1                                      |
-| - User2                                      |
-| - User3                                      |
-------------------------------------------------
-```
-
----
-
-### User Flow
-
-1. **Main Page:**
-   - User lands on the main page and sees two buttons: "Create Meeting" and "Join Meeting".
-
-2. **Create Meeting:**
-   - User clicks "Create Meeting".
-   - User is taken to the Create Meeting Page.
-   - User enters a meeting name and clicks "Generate Meeting".
-   - A new meeting is created, and the user is redirected to the Meeting Page.
-
-3. **Join Meeting:**
-   - User clicks "Join Meeting".
-   - User is taken to the Join Meeting Page.
-   - User enters the meeting ID and clicks "Join Meeting".
-   - The user is redirected to the Meeting Page.
-
-4. **Meeting Page:**
-   - Users in the meeting can see video feeds, a list of participants, and use controls for audio, video, and chat.
-
-
-## Demo
-
-Give it a try at https://meet.im3.live
