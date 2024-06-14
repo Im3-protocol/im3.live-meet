@@ -1,9 +1,8 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { ReactElement, useState } from 'react';
-import { encodePassphrase, randomString } from '../lib/client-utils';
+import { encodePassphrase, generateRoomId, randomString } from '../lib/client-utils';
 import styles from '../styles/Home.module.css';
-import axios from 'axios';
 
 interface TabsProps {
   children: ReactElement[];
@@ -44,9 +43,9 @@ function DemoMeetingTab({ label }: { label: string }) {
   const [sharedPassphrase, setSharedPassphrase] = useState(randomString(64));
   const startMeeting = () => {
     if (e2ee) {
-      router.push(`/rooms/${randomString(10)}#${encodePassphrase(sharedPassphrase)}`);
+      router.push(`/rooms/${generateRoomId()}#${encodePassphrase(sharedPassphrase)}`);
     } else {
-      router.push(`/rooms/${randomString(10)}`);
+      router.push(`/rooms/${generateRoomId()}`);
     }
   };
   return (
@@ -81,108 +80,72 @@ function DemoMeetingTab({ label }: { label: string }) {
   );
 }
 
-async function createMeeting(username: string) {
-  try {
-    const response = await axios.post('https://gateway.im3.live/api/create-meeting', {
-      username,
-      user_count_limit: 10,
-      time_limit: 60
-    });
-
-    if (response.data && response.data.url) {
-      return response.data.url;
-    } else {
-      throw new Error('Failed to create meeting');
-    }
-  } catch (error) {
-    console.error('Error creating meeting:', error);
-    throw error;
-  }
-}
-
-async function joinMeeting(url: string, username: string) {
-  try {
-    const response = await axios.post('https://gateway.im3.live/api/join-meeting', {
-      url,
-      username,
-    });
-
-    if (response.data && response.data.token) {
-      return response.data.token;
-    } else {
-      throw new Error('Failed to join meeting');
-    }
-  } catch (error) {
-    console.error('Error joining meeting:', error);
-    throw error;
-  }
-}
-
 function CustomConnectionTab({ label }: { label: string }) {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [meetingUrl, setMeetingUrl] = useState('');
+
   const [e2ee, setE2ee] = useState(false);
   const [sharedPassphrase, setSharedPassphrase] = useState(randomString(64));
 
-  const handleCreateMeeting = async () => {
-    try {
-      const url = await createMeeting(username);
-      setMeetingUrl(url);
-      alert(`Meeting created! URL: ${url}`);
-    } catch (error) {
-      console.error('Error creating meeting:', error);
-      alert('Error creating meeting');
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target as HTMLFormElement);
+    const serverUrl = formData.get('serverUrl');
+    const token = formData.get('token');
+    if (e2ee) {
+      router.push(
+        `/custom/?liveKitUrl=wss://livekit.im3.live&token=${token}#${encodePassphrase(sharedPassphrase)}`,
+      );
+    } else {
+      router.push(`/custom/?liveKitUrl=wss://livekit.im3.live&token=${token}`);
     }
   };
-
-  const handleJoinMeeting = async () => {
-    try {
-      const userToken = await joinMeeting(meetingUrl, username);
-
-      if (e2ee) {
-        router.push(
-          `/custom/?liveKitUrl=${encodeURIComponent('wss://livekit.im3.live')}&token=${userToken}#${encodePassphrase(sharedPassphrase)}`,
-        );
-      } else {
-        router.push(`/custom/?liveKitUrl=${encodeURIComponent('wss://livekit.im3.live')}&token=${userToken}`);
-      }
-    } catch (error) {
-      console.error('Error joining the meeting:', error);
-      alert('Error joining the meeting');
-    }
-  };
-
   return (
-    <div className={styles.tabContent}>
+    <form className={styles.tabContent} onSubmit={onSubmit}>
       <p style={{ marginTop: 0 }}>
-        Connect IM3 Meet - Enjoy IM3 Meet
+        Connect IM3 Meet with a custom server using IM3 Servers.
       </p>
-      <input
-        type="text"
-        name="username"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+      <textarea
+        id="token"
+        name="token"
+        placeholder="Token"
         required
-        style={{ padding: '1px 2px', fontSize: 'inherit', lineHeight: 'inherit', marginBottom: '1rem' }}
+        rows={5}
+        style={{ padding: '1px 2px', fontSize: 'inherit', lineHeight: 'inherit' }}
       />
-      <button onClick={handleCreateMeeting} style={{ paddingInline: '1.25rem', width: '100%' }} className="lk-button">
-        Create Meeting
-      </button>
-      <input
-        type="text"
-        name="meetingUrl"
-        placeholder="Meeting URL"
-        value={meetingUrl}
-        onChange={(e) => setMeetingUrl(e.target.value)}
-        required
-        style={{ padding: '1px 2px', fontSize: 'inherit', lineHeight: 'inherit', marginBottom: '1rem', marginTop: '1rem' }}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+          <input
+            id="use-e2ee"
+            type="checkbox"
+            checked={e2ee}
+            onChange={(ev) => setE2ee(ev.target.checked)}
+          ></input>
+          <label htmlFor="use-e2ee">Enable end-to-end encryption</label>
+        </div>
+        {e2ee && (
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+            <label htmlFor="passphrase">Passphrase</label>
+            <input
+              id="passphrase"
+              type="password"
+              value={sharedPassphrase}
+              onChange={(ev) => setSharedPassphrase(ev.target.value)}
+            />
+          </div>
+        )}
+      </div>
+
+      <hr
+        style={{ width: '100%', borderColor: 'rgba(255, 255, 255, 0.15)', marginBlock: '1rem' }}
       />
-      <button onClick={handleJoinMeeting} style={{ paddingInline: '1.25rem', width: '100%' }} className="lk-button">
-        Join Meeting
+      <button
+        style={{ paddingInline: '1.25rem', width: '100%' }}
+        className="lk-button"
+        type="submit"
+      >
+        Connect
       </button>
-    </div>
+    </form>
   );
 }
 
@@ -207,7 +170,7 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
         <div className="header">
           <img src="/images/im3.svg" alt="LiveKit Meet"  />
         </div>
-        <CustomConnectionTab label="IM3 Meet" />
+        <CustomConnectionTab label="Custom"/>
       </main>
       <footer data-lk-theme="default">
         Hosted on{' '}
