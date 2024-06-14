@@ -93,10 +93,10 @@ function CustomConnectionTab({ label }: { label: string }) {
     const token = formData.get('token');
     if (e2ee) {
       router.push(
-        `/custom/?liveKitUrl=${serverUrl}&token=${token}#${encodePassphrase(sharedPassphrase)}`,
+        `/custom/?liveKitUrl=wss://livekit.im3.live&token=${token}#${encodePassphrase(sharedPassphrase)}`,
       );
     } else {
-      router.push(`/custom/?liveKitUrl=${serverUrl}&token=${token}`);
+      router.push(`/custom/?liveKitUrl=wss://livekit.im3.live&token=${token}`);
     }
   };
   return (
@@ -104,13 +104,6 @@ function CustomConnectionTab({ label }: { label: string }) {
       <p style={{ marginTop: 0 }}>
         Connect IM3 Meet with a custom server using IM3 Servers.
       </p>
-      <input
-        id="serverUrl"
-        name="serverUrl"
-        type="url"
-        placeholder="IM3 Server URL: wss://*.IM3.live"
-        required
-      />
       <textarea
         id="token"
         name="token"
