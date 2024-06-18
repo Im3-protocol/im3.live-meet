@@ -1,9 +1,11 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { encodePassphrase, randomString } from '../lib/client-utils';
 import styles from '../styles/Home.module.css';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera, faCameraSlash, faMicrophone, faMicrophoneSlash } from '@fortawesome/free-solid-svg-icons';
 
 interface TabsProps {
   children: ReactElement[];
@@ -120,10 +122,70 @@ async function joinMeeting(url: string, username: string) {
 
 function CustomConnectionTab({ label }: { label: string }) {
   const router = useRouter();
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [username, setUsername] = useState('');
   const [meetingUrl, setMeetingUrl] = useState('');
   const [e2ee, setE2ee] = useState(false);
   const [sharedPassphrase, setSharedPassphrase] = useState(randomString(64));
+  const [audioTest, setAudioTest] = useState<string>('Audio test not started');
+  const [isCameraWorking, setIsCameraWorking] = useState<boolean>(false);
+  const [isMicOn, setIsMicOn] = useState<boolean>(true);
+  const [isCameraOn, setIsCameraOn] = useState<boolean>(true);
+
+  useEffect(() => {
+    const startMedia = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setIsCameraWorking(true);
+        }
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        analyser.fftSize = 256;
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        const checkAudio = () => {
+          analyser.getByteFrequencyData(dataArray);
+          const sum = dataArray.reduce((a, b) => a + b, 0);
+          if (sum > 0) {
+            setAudioTest('Audio input detected');
+          } else {
+            setAudioTest('No audio input detected');
+          }
+          requestAnimationFrame(checkAudio);
+        };
+
+        checkAudio();
+      } catch (err) {
+        console.error('Error accessing media devices.', err);
+        setAudioTest('Error accessing media devices');
+        setIsCameraWorking(false);
+      }
+    };
+
+    startMedia();
+  }, []);
+
+  const toggleCamera = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream).getVideoTracks().forEach(track => {
+        track.enabled = !track.enabled;
+      });
+      setIsCameraOn(!isCameraOn);
+    }
+  };
+
+  const toggleMic = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream).getAudioTracks().forEach(track => {
+        track.enabled = !track.enabled;
+      });
+      setIsMicOn(!isMicOn);
+    }
+  };
 
   const handleCreateMeeting = async () => {
     try {
@@ -155,6 +217,20 @@ function CustomConnectionTab({ label }: { label: string }) {
 
   return (
     <div className={styles.tabContent}>
+      <div style={{ marginBottom: '1rem', textAlign: 'center', border: '2px solid #ccc', padding: '10px', borderRadius: '10px' }}>
+        <video ref={videoRef} autoPlay playsInline style={{ width: '400px', height: 'auto', borderRadius: '10px', marginBottom: '10px' }} />
+        {!isCameraWorking && <p>Error accessing camera</p>}
+        
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          <button onClick={toggleCamera} className="lk-button" style={{ padding: '10px' }}>
+              {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
+          </button>
+          <button onClick={toggleMic} className="lk-button" style={{ padding: '10px' }}>
+              {isMicOn ? 'Turn Mic Off' : 'Turn Mic On'}
+          </button>
+        </div>
+
+      </div>
       <p style={{ marginTop: 0 }}>
         Connect IM3 Meet - Enjoy IM3 Meet
       </p>
@@ -182,25 +258,41 @@ function CustomConnectionTab({ label }: { label: string }) {
       <button onClick={handleJoinMeeting} style={{ paddingInline: '1.25rem', width: '100%' }} className="lk-button">
         Join Meeting
       </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+          <input
+            id="use-e2ee"
+            type="checkbox"
+            checked={e2ee}
+            onChange={(ev) => setE2ee(ev.target.checked)}
+          ></input>
+          <label htmlFor="use-e2ee">Enable end-to-end encryption</label>
+        </div>
+        {e2ee && (
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
+            <label htmlFor="passphrase">Passphrase</label>
+            <input
+              id="passphrase"
+              type="password"
+              value={sharedPassphrase}
+              onChange={(ev) => setSharedPassphrase(ev.target.value)}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-export const getServerSideProps: GetServerSideProps<{ tabIndex: number }> = async ({
+export const getServerSideProps: GetServerSideProps = async ({
   query,
   res,
 }) => {
   res.setHeader('Cache-Control', 'public, max-age=7200');
-  const tabIndex = query.tab === 'custom' ? 1 : 0;
-  return { props: { tabIndex } };
+  return { props: {} };
 };
 
-const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-  function onTabSelected(index: number) {
-    const tab = index === 1 ? 'custom' : 'demo';
-    router.push({ query: { tab } });
-  }
+const Home = () => {
   return (
     <>
       <main className={styles.main} data-lk-theme="default">
@@ -221,3 +313,4 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
 };
 
 export default Home;
+
