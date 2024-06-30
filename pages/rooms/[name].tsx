@@ -1,9 +1,7 @@
-'use client';
 import {
   LiveKitRoom,
   VideoConference,
   formatChatMessageLinks,
-  useToken,
   LocalUserChoices,
   PreJoin,
 } from '@livekit/components-react';
@@ -25,6 +23,7 @@ import * as React from 'react';
 import { DebugMode } from '../../lib/Debug';
 import { decodePassphrase, useServerUrl } from '../../lib/client-utils';
 import { SettingsMenu } from '../../lib/SettingsMenu';
+import axios from 'axios';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -56,7 +55,7 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>im3 Meet</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/images/im3.svg" />
       </Head>
 
       <main data-lk-theme="default">
@@ -68,11 +67,7 @@ const Home: NextPage = () => {
           ></ActiveRoom>
         ) : (
           <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
-            <PreJoin
-              onError={onPreJoinError}
-              defaults={preJoinDefaults}
-              onSubmit={handlePreJoinSubmit}
-            ></PreJoin>
+            <JoinMeetingForm onSubmit={handlePreJoinSubmit} onError={onPreJoinError} />
           </div>
         )}
       </main>
@@ -88,16 +83,26 @@ type ActiveRoomProps = {
   region?: string;
   onLeave?: () => void;
 };
+
 const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
-  const tokenOptions = React.useMemo(() => {
-    return {
-      userInfo: {
-        identity: userChoices.username,
-        name: userChoices.username,
-      },
-    };
-  }, [userChoices.username]);
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
+  const [token, setToken] = React.useState<string | null>(null);
+
+  const fetchToken = async () => {
+    try {
+      const response = await axios.post('https://gateway.im3.live/api/join-meeting', {
+        url: `wss://livekit.im3.live/join/${roomName}`,
+        username: userChoices.username,
+      });
+      setToken(response.data.token);
+    } catch (error) {
+      console.error('Error fetching token:', error);
+      alert('Failed to join meeting');
+    }
+  };
+
+  React.useEffect(() => {
+    fetchToken();
+  }, [roomName, userChoices.username]);
 
   const router = useRouter();
   const { region, hq, codec } = router.query;
@@ -172,7 +177,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
 
   return (
     <>
-      {liveKitUrl && (
+      {liveKitUrl && token && (
         <LiveKitRoom
           room={room}
           token={token}
@@ -194,3 +199,129 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     </>
   );
 };
+
+const JoinMeetingForm = ({ onSubmit, onError }: { onSubmit: any; onError: any }) => {
+  const [username, setUsername] = useState('');
+  const [roomName, setRoomName] = useState('');
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const [isMicOn, setIsMicOn] = useState(true);
+  const videoRef = useRef(null);
+
+  const startMedia = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error('Error accessing media devices.', err);
+    }
+  };
+
+  useEffect(() => {
+    startMedia();
+  }, []);
+
+  const toggleCamera = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream).getVideoTracks().forEach(track => {
+        track.enabled = !track.enabled;
+      });
+      setIsCameraOn(!isCameraOn);
+    }
+  };
+
+  const toggleMic = () => {
+    if (videoRef.current?.srcObject) {
+      (videoRef.current.srcObject as MediaStream).getAudioTracks().forEach(track => {
+        track.enabled = !track.enabled;
+      });
+      setIsMicOn(!isMicOn);
+    }
+  };
+
+  const handleCreateMeeting = async () => {
+    try {
+      const response = await axios.post('https://gateway.im3.live/api/create-meeting', {
+        username,
+        user_count_limit: 10,
+        time_limit: 60,
+        roomName: roomName || undefined, // Pass roomName if available
+      });
+
+      if (response.data && response.data.roomName) {
+        setRoomName(response.data.roomName);
+        alert(`Meeting created! Room Name: ${response.data.roomName}`);
+      } else {
+        throw new Error('Failed to create meeting');
+      }
+    } catch (error) {
+      console.error('Error creating meeting:', error);
+      alert('Error creating meeting');
+    }
+  };
+
+  const handleJoinMeeting = async () => {
+    try {
+      const response = await axios.post('https://gateway.im3.live/api/join-meeting', {
+        url: `wss://livekit.im3.live/join/${roomName}`,
+        username,
+      });
+
+      if (response.data && response.data.token) {
+        onSubmit({
+          username,
+          token: response.data.token,
+        });
+      } else {
+        throw new Error('Failed to join meeting');
+      }
+    } catch (error) {
+      console.error('Error joining meeting:', error);
+      alert('Error joining meeting');
+    }
+  };
+
+  return (
+    <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
+      <div style={{ marginBottom: '1rem', textAlign: 'center', border: '2px solid #ccc', padding: '10px', borderRadius: '10px' }}>
+        <h2>Test your Camera and Microphone</h2>
+        <video ref={videoRef} autoPlay playsInline style={{ width: '200px', height: 'auto', borderRadius: '10px', marginBottom: '10px' }} />
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          <button onClick={toggleCamera} className="lk-button" style={{ padding: '10px' }}>
+            {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
+          </button>
+          <button onClick={toggleMic} className="lk-button" style={{ padding: '10px' }}>
+            {isMicOn ? 'Turn Mic Off' : 'Turn Mic On'}
+          </button>
+        </div>
+      </div>
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+        style={{ padding: '1px 2px', fontSize: 'inherit', lineHeight: 'inherit', marginBottom: '1rem' }}
+      />
+      <input
+        type="text"
+        name="roomName"
+        placeholder="Room Name (leave empty to create)"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
+        style={{ padding: '1px 2px', fontSize: 'inherit', lineHeight: 'inherit', marginBottom: '1rem' }}
+      />
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+        <button onClick={handleCreateMeeting} className="lk-button" style={{ paddingInline: '1.25rem' }}>
+          Create Room
+        </button>
+        <button onClick={handleJoinMeeting} className="lk-button" style={{ paddingInline: '1.25rem' }}>
+          Join Meeting
+        </button>
+      </div>
+    </div>
+  );
+};
+

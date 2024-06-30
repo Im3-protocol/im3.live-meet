@@ -8,16 +8,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo
-        title="IM3 Meet"
+        title="im3 meet"
         titleTemplate="%s"
-        defaultTitle="IM3 Meet"
-        description="IM3 is an open source WebRTC project that gives you everything needed to build scalable and real-time audio and/or video experiences in your applications."
-        
+        defaultTitle="im3 meet"
+        description="im3"
+        twitter={{
+          handle: '@livekitted',
+          site: '@livekitted',
+          cardType: 'summary_large_image',
+        }}
         openGraph={{
-          url: 'https://meet.im3.live',
+          url: 'https://im3.live',
           images: [
             {
-              url: '/images/im3.svg',
+              url: 'https://meet.livekit.io/images/im3.svg',
               width: 2000,
               height: 1000,
               type: 'image/png',
