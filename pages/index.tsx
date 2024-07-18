@@ -41,6 +41,7 @@ function DemoMeetingTab({ label }: { label: string }) {
   const router = useRouter();
   const [e2ee, setE2ee] = useState(false);
   const [sharedPassphrase, setSharedPassphrase] = useState(randomString(64));
+
   const startMeeting = () => {
     if (e2ee) {
       router.push(`/rooms/${generateRoomId()}#${encodePassphrase(sharedPassphrase)}`);
@@ -80,7 +81,6 @@ function DemoMeetingTab({ label }: { label: string }) {
   );
 }
 
-
 export const getServerSideProps: GetServerSideProps<{ tabIndex: number }> = async ({
   query,
   res,
@@ -103,7 +103,6 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
           <img src="/images/im3.svg" alt="LiveKit Meet" width="400" height="300" />
         </div>
         <DemoMeetingTab label="Demo" />
-          
       </main>
       <footer data-lk-theme="default">
         Hosted on{' '}

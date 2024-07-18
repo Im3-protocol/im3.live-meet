@@ -25,20 +25,14 @@ import * as React from 'react';
 import { DebugMode } from '../../lib/Debug';
 import { decodePassphrase, useServerUrl } from '../../lib/client-utils';
 import { SettingsMenu } from '../../lib/SettingsMenu';
-import useWagmi from '../../hooks/useWagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useSignMessage } from 'wagmi';
-import { userAuthApi } from '../api/userAuth';
+
 const Home: NextPage = () => {
   const router = useRouter();
   const { name: roomName } = router.query;
+
   const [preJoinChoices, setPreJoinChoices] = React.useState<LocalUserChoices | undefined>(
     undefined,
   );
-
-  const [token, setToken] = React.useState('');
-
-  const { data: signMessageData, signMessage, isLoading } = useSignMessage();
 
   const preJoinDefaults = React.useMemo(() => {
     return {
@@ -58,45 +52,11 @@ const Home: NextPage = () => {
 
   const onLeave = React.useCallback(() => router.push('/'), []);
 
-  const { openConnectModal } = useConnectModal();
-  const { account } = useWagmi();
-
-  const handleConnectWallet = () => {
-    openConnectModal!();
-  };
-
-  const handleSignMessage = async () => {
-    if (account) {
-      signMessage({
-        message: 'Please sign this message to verify connecting your wallet',
-      });
-    }
-  };
-
-  const handleAuthApi = async () => {
-    if (signMessageData && roomName && !Array.isArray(roomName) && account) {
-      try {
-        const res = await userAuthApi(signMessageData, roomName, account, account);
-        setToken(res);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
-
-  React.useEffect(() => {
-    handleAuthApi();
-  }, [signMessageData]);
-
-  React.useEffect(() => {
-    handleSignMessage();
-  }, [account]);
-
   return (
     <>
       <Head>
-        <title>LiveKit Meet</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>IM3 Meet</title>
+        <link rel="icon" href="/images/im3.svg" />
       </Head>
 
       <main data-lk-theme="default">
@@ -105,29 +65,13 @@ const Home: NextPage = () => {
             roomName={roomName}
             userChoices={preJoinChoices}
             onLeave={onLeave}
-            token={token}
           ></ActiveRoom>
         ) : (
           <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
             <PreJoin
               onError={onPreJoinError}
               defaults={preJoinDefaults}
-              joinLabel={
-                !account && !isLoading
-                  ? 'Connect wallet'
-                  : account && isLoading
-                  ? 'Signing Message'
-                  : account && !isLoading && !signMessageData
-                  ? 'Sign message to Join Room'
-                  : 'Join Room'
-              }
-              onSubmit={
-                account && signMessageData
-                  ? handlePreJoinSubmit
-                  : account && !signMessageData
-                  ? () => handleSignMessage()
-                  : () => handleConnectWallet()
-              }
+              onSubmit={handlePreJoinSubmit}
             ></PreJoin>
           </div>
         )}
@@ -143,9 +87,8 @@ type ActiveRoomProps = {
   roomName: string;
   region?: string;
   onLeave?: () => void;
-  token: string | undefined;
 };
-const ActiveRoom = ({ roomName, userChoices, onLeave, token }: ActiveRoomProps) => {
+const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   const tokenOptions = React.useMemo(() => {
     return {
       userInfo: {
@@ -154,7 +97,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave, token }: ActiveRoomProps) 
       },
     };
   }, [userChoices.username]);
-  // const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
+  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, tokenOptions);
 
   const router = useRouter();
   const { region, hq, codec } = router.query;

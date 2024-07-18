@@ -2,32 +2,34 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import '@livekit/components-styles';
 import '@livekit/components-styles/prefabs';
+import '@rainbow-me/rainbowkit/styles.css';
 import { DefaultSeo } from 'next-seo';
+import WagmiConfigRoot from '../components/WagmiRoot';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <DefaultSeo
-        title="im3 meet"
+        title="IM3 Meet"
         titleTemplate="%s"
-        defaultTitle="im3 meet"
-        description="im3"
+        defaultTitle="IM3 Meet"
+        description="IM3 Meet"
         twitter={{
           handle: '@livekitted',
           site: '@livekitted',
           cardType: 'summary_large_image',
         }}
         openGraph={{
-          url: 'https://im3.live',
+          url: 'https://meet.im3.live',
           images: [
             {
-              url: 'https://meet.livekit.io/images/im3.svg',
+              url: 'https://meet.im3.live/images/im3.svg',
               width: 2000,
               height: 1000,
               type: 'image/png',
             },
           ],
-          site_name: 'LiveKit Meet',
+          site_name: 'IM3 Meet',
         }}
         additionalMetaTags={[
           {
@@ -52,7 +54,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         ]}
       />
-      <Component {...pageProps} />
+      <WagmiConfigRoot>
+        <Component {...pageProps} />
+      </WagmiConfigRoot>
     </>
   );
 }

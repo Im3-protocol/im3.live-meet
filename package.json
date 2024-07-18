@@ -3,13 +3,16 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0 -p 8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p 8080",
     "lint": "next lint"
   },
   "dependencies": {
     "@datadog/browser-logs": "^5.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@livekit/components-react": "2.3.3",
     "@livekit/components-styles": "1.0.12",
     "@livekit/krisp-noise-filter": "^0.2.0",
@@ -20,7 +23,10 @@
     "next-seo": "^6.0.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "tinykeys": "^2.1.0"
+    "tinykeys": "^2.1.0",
+    "viem": "^1.6.4",
+    "wagmi": "1.4.13",
+    "@rainbow-me/rainbowkit": "^1.0.8"
   },
   "devDependencies": {
     "@types/node": "20.14.1",
