@@ -87,6 +87,10 @@ const Home: NextPage = () => {
     }
   };
 
+  const truncateAddress = (address: string, size = 4) => {
+    return `${address.substring(0, size + 2)}...${address.substring(address.length - size)}`;
+  };
+
   const handleSignMessage = () => {
     if (account) {
       signMessage({
@@ -144,6 +148,21 @@ const Home: NextPage = () => {
       </Head>
 
       <main data-lk-theme="default">
+        {account && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'end',
+              padding: '30px',
+              position: 'absolute',
+              zIndex: '100000',
+              top: 0,
+              right: 0,
+            }}
+          >
+            {truncateAddress(account)}
+          </div>
+        )}
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
           <ActiveRoom
             roomName={roomName}
