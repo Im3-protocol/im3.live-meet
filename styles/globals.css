@@ -68,3 +68,8 @@ h2 a {
 h2 a {
   text-decoration: none;
 }
+
+.join-as-guest-button {
+  cursor: pointer;
+  margin-left: 15px;
+}

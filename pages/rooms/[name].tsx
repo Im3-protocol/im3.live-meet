@@ -36,7 +36,18 @@ const Home: NextPage = () => {
     undefined,
   );
 
+  const [roomValues, setRoomValues] = React.useState<LocalUserChoices | null>();
+  const [joinAsGuestText, setJoinAsGuestText] = React.useState('Join as Guest');
+
+  const { openConnectModal } = useConnectModal();
+
+  const { account } = useWagmi();
+
+  const zeroAddress = '0x0000000000000000000000000000000000000000';
+
   const [token, setToken] = React.useState('');
+
+  const [isGuest, setIsGuest] = React.useState(false);
 
   const { data: signMessageData, signMessage, isLoading } = useSignMessage();
 
@@ -48,24 +59,35 @@ const Home: NextPage = () => {
     };
   }, []);
 
-  const handlePreJoinSubmit = React.useCallback((values: LocalUserChoices) => {
-    setPreJoinChoices(values);
-  }, []);
-
-  const onPreJoinError = React.useCallback((e: any) => {
-    console.error(e);
-  }, []);
-
-  const onLeave = React.useCallback(() => router.push('/'), []);
-
-  const { openConnectModal } = useConnectModal();
-  const { account } = useWagmi();
-
-  const handleConnectWallet = () => {
-    openConnectModal!();
+  const handleAuthApi = async (userName: string) => {
+    if (signMessageData && roomName && !Array.isArray(roomName) && account) {
+      try {
+        const res = await userAuthApi(signMessageData, roomName, userName, account, account);
+        console.log(token);
+        setToken(res);
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    }
   };
 
-  const handleSignMessage = async () => {
+  const handleAuthApiGuest = async (userName: string) => {
+    if (roomName && !Array.isArray(roomName)) {
+      try {
+        const res = await userAuthApi('', roomName, userName, zeroAddress, zeroAddress);
+        console.log(res);
+        setToken(res);
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    }
+  };
+
+  const handleSignMessage = () => {
     if (account) {
       signMessage({
         message: 'Please sign this message to verify connecting your wallet',
@@ -73,24 +95,46 @@ const Home: NextPage = () => {
     }
   };
 
-  const handleAuthApi = async () => {
-    if (signMessageData && roomName && !Array.isArray(roomName) && account) {
-      try {
-        const res = await userAuthApi(signMessageData, roomName, account, account);
-        setToken(res);
-      } catch (e) {
-        console.log(e);
-      }
+  const handleConnectWallet = async () => {
+    openConnectModal!();
+  };
+
+  const handleSetPreJonChoices = async () => {
+    if (roomValues) {
+      const res = await handleAuthApi(roomValues.username);
+      console.log(res);
+      if (!res) return;
+      setPreJoinChoices(roomValues);
     }
   };
 
   React.useEffect(() => {
-    handleAuthApi();
-  }, [signMessageData]);
+    if (account && !signMessageData && roomValues) handleSignMessage();
 
-  React.useEffect(() => {
-    handleSignMessage();
-  }, [account]);
+    if (signMessageData && roomValues) handleSetPreJonChoices();
+  }, [account, signMessageData]);
+
+  const handlePreJoinSubmit = React.useCallback(
+    async (values: LocalUserChoices) => {
+      setRoomValues(values);
+      if (isGuest) {
+        setJoinAsGuestText('Joining as Guest ...');
+        const res = await handleAuthApiGuest(values.username);
+        if (!res) return;
+        setPreJoinChoices(values);
+      } else {
+        if (!account) handleConnectWallet();
+        if (account && !signMessageData) handleSignMessage();
+      }
+    },
+    [isGuest],
+  );
+
+  const onPreJoinError = React.useCallback((e: any) => {
+    console.error(e);
+  }, []);
+
+  const onLeave = React.useCallback(() => router.push('/'), []);
 
   return (
     <>
@@ -108,27 +152,45 @@ const Home: NextPage = () => {
             token={token}
           ></ActiveRoom>
         ) : (
-          <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}>
-            <PreJoin
-              onError={onPreJoinError}
-              defaults={preJoinDefaults}
-              joinLabel={
-                !account && !isLoading
-                  ? 'Connect wallet'
-                  : account && isLoading
-                  ? 'Signing Message'
-                  : account && !isLoading && !signMessageData
-                  ? 'Sign message to Join Room'
-                  : 'Join Room'
-              }
-              onSubmit={
-                account && signMessageData
-                  ? handlePreJoinSubmit
-                  : account && !signMessageData
-                  ? () => handleSignMessage()
-                  : () => handleConnectWallet()
-              }
-            ></PreJoin>
+          <div
+            style={{
+              display: 'grid',
+              placeItems: 'center',
+              height: '100%',
+            }}
+          >
+            <div className="preJoin-wrapper">
+              {!isGuest ? (
+                <PreJoin
+                  onError={onPreJoinError}
+                  defaults={preJoinDefaults}
+                  joinLabel={
+                    !account && !isLoading
+                      ? 'Connect wallet'
+                      : account && isLoading
+                      ? 'Signing Message'
+                      : account && !isLoading && !signMessageData
+                      ? 'Sign message to Join Room'
+                      : 'Joining Room ...'
+                  }
+                  onSubmit={handlePreJoinSubmit}
+                ></PreJoin>
+              ) : (
+                <PreJoin
+                  onError={onPreJoinError}
+                  defaults={preJoinDefaults}
+                  joinLabel={joinAsGuestText}
+                  onSubmit={handlePreJoinSubmit}
+                ></PreJoin>
+              )}
+              <div style={{ minHeight: '20px', marginTop: '-8px' }}>
+                {!isGuest && (
+                  <div className="join-as-guest-button" onClick={() => setIsGuest(true)}>
+                    If don't have Wallet Join as Guest!
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </main>
