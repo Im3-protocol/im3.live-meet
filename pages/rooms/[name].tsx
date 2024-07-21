@@ -148,21 +148,20 @@ const Home: NextPage = () => {
       </Head>
 
       <main data-lk-theme="default">
-        {account && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'end',
-              padding: '30px',
-              position: 'absolute',
-              zIndex: '100000',
-              top: 0,
-              right: 0,
-            }}
-          >
-            {truncateAddress(account)}
-          </div>
-        )}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'end',
+            padding: '30px',
+            position: 'absolute',
+            zIndex: '100000',
+            top: 0,
+            right: 0,
+          }}
+        >
+          {isGuest ? 'Guest' : account ? truncateAddress(account) : ''}
+        </div>
+
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
           <ActiveRoom
             roomName={roomName}
@@ -175,7 +174,8 @@ const Home: NextPage = () => {
             style={{
               display: 'grid',
               placeItems: 'center',
-              height: '100%',
+              height: 'inherit',
+              width: '100%',
             }}
           >
             <div className="preJoin-wrapper">
