@@ -148,7 +148,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main data-lk-theme="default">
-        <div
+        {/* <div
           style={{
             display: 'flex',
             justifyContent: 'end',
@@ -160,7 +160,7 @@ const Home: NextPage = () => {
           }}
         >
           {isGuest ? 'Guest' : account ? truncateAddress(account) : ''}
-        </div>
+        </div> */}
 
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
           <ActiveRoom
