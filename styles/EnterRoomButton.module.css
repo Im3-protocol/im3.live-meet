@@ -1,0 +1,24 @@
+.btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    gap: .5rem;
+    background-color: #111;
+    border: 1 white;
+    border-radius: 16px;
+    height: 3.6rem;
+    width: 14rem;
+    margin-top: 2rem;
+    font-weight: bold;
+}
+
+.btn:hover{
+    cursor: pointer;
+    font-weight: 600;
+    transition: all .3s ease-in-out ;
+    background-image: url('../public/images/enterRoom/GrapthBG.svg');
+    background-size: cover;
+    border:solid 2px #91864c;
+}
