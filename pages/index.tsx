@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { ReactElement, useState } from 'react';
 import { encodePassphrase, generateRoomId, randomString } from '../lib/client-utils';
 import styles from '../styles/Home.module.css';
+import EnterRoom from '../components/EnterRoom';
 
 interface TabsProps {
   children: ReactElement[];
@@ -98,13 +99,15 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
   }
   return (
     <>
-      <main className={styles.main} data-lk-theme="default">
-        <div className="header">
+      <main data-lk-theme="default" className={styles.bg}>
+        {/* <div className="header">
           <img src="/images/im3.svg" alt="LiveKit Meet" width="400" height="300" />
-        </div>
-        <DemoMeetingTab label="Demo" />
+        </div> */}
+        <div className={styles.bg}></div>
+        <EnterRoom />
+        {/* <DemoMeetingTab label="Demo" /> */}
       </main>
-      <footer data-lk-theme="default">
+      {/* <footer data-lk-theme="default">
         Hosted on{' '}
         <a href="https://im3.live" rel="noopener">
           im3 Cloud
@@ -114,7 +117,7 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
           GitHub
         </a>
         .
-      </footer>
+      </footer> */}
     </>
   );
 };

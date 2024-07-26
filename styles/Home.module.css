@@ -11,7 +11,7 @@
 .tabContainer {
   width: 100%;
   max-width: 500px;
-  padding-inline: 2rem;
+  /* padding-inline: 2rem; */
 }
 
 .tabSelect {
@@ -36,4 +36,33 @@
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
+}
+
+.bg {
+  background-image: url('../public/images/enterRoom/GrapthBG.svg');
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.bg2{
+  background-image: url('../public/images/enterRoom/Graph2.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+
+
+@media only screen and (min-width: 320px) {
+  .bg {
+    background-size: inherit;
+    background-position: 85% 100%;
+  }
+}
+
+@media only screen and (min-width: 780px) {
+  .bg {
+    background-size: contain;
+    background-position: 100% 100%;
+  }
 }

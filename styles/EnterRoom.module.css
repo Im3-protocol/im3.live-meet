@@ -1,0 +1,89 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  /* scale: .8; */
+}
+
+.tittle {
+  font-weight: bold;
+  font-size: 48px;
+  text-align: start;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: medium;
+}
+
+.logo {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  padding-top: 2rem;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #a89e5c, #8a8048, #91864c, #bcb276);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/*Media Query for responsive*/
+@media screen and (min-width: 320px) {
+  .tittle {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .page {
+    margin: 0px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: #918f8f;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .tittle {
+    font-size: 48px;
+    text-align: left;
+  }
+
+  .page {
+    width: 76%;
+    margin-left: 5rem;
+    align-items: normal;
+  }
+
+  .logo {
+    justify-content: end;
+  }
+
+  .subtitle {
+    font-size: 24px;
+    color: white;
+    width: 100%;
+    text-align: unset;
+  }
+}
+
+
+@media screen and (min-width: 1024px) {
+  
+    .page {
+      width: 36%;
+      margin-left: 9rem;
+    }
+  }
+  

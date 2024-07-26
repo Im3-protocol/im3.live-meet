@@ -29,6 +29,10 @@ import useWagmi from '../../hooks/useWagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useSignMessage } from 'wagmi';
 import { userAuthApi } from '../api/userAuth';
+import styles from "../../styles/Home.module.css"
+import checkBoxStyles from "../../styles/checkBox.module.css"
+
+
 const Home: NextPage = () => {
   const router = useRouter();
   const { name: roomName } = router.query;
@@ -140,6 +144,11 @@ const Home: NextPage = () => {
 
   const onLeave = React.useCallback(() => router.push('/'), []);
 
+
+  const joinModeHandler = () => {
+    setIsGuest(((prevChecked) => !prevChecked))
+    console.log(isGuest);
+  }
   return (
     <>
       <Head>
@@ -147,7 +156,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main data-lk-theme="default">
+      <main data-lk-theme="default" className={styles.bg2}>
         {/* <div
           style={{
             display: 'flex',
@@ -178,7 +187,7 @@ const Home: NextPage = () => {
               width: '100%',
             }}
           >
-            <div className="preJoin-wrapper">
+            <div className={`${styles.tabContainer} preJoin-wrapper`}>
               {!isGuest ? (
                 <PreJoin
                   onError={onPreJoinError}
@@ -202,12 +211,17 @@ const Home: NextPage = () => {
                   onSubmit={handlePreJoinSubmit}
                 ></PreJoin>
               )}
-              <div style={{ minHeight: '20px', marginTop: '-8px' }}>
-                {!isGuest && (
+
+              <div className={checkBoxStyles.guest}>
+                {/* {!isGuest && (
                   <div className="join-as-guest-button" onClick={() => setIsGuest(true)}>
                     If don't have Wallet Join as Guest!
                   </div>
-                )}
+                )} */}
+                {!isGuest&&<p className={checkBoxStyles.subtext}>Don't have a wallet?</p>}
+                <button onClick={joinModeHandler} className={checkBoxStyles.btn}>
+                  {isGuest?"Have a wallet?": "Join as a Guest"}
+                </button>
               </div>
             </div>
           </div>
