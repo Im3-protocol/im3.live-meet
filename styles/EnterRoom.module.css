@@ -9,11 +9,14 @@
   font-weight: bold;
   font-size: 48px;
   text-align: start;
+  
 }
 
 .subtitle {
   font-size: 24px;
   font-weight: medium;
+  color: #918f8f;
+
 }
 
 .logo {
@@ -54,6 +57,7 @@
   }
 }
 
+
 @media screen and (min-width: 768px) {
   .tittle {
     font-size: 48px;
@@ -72,7 +76,7 @@
 
   .subtitle {
     font-size: 24px;
-    color: white;
+    color: #918f8f;
     width: 100%;
     text-align: unset;
   }
@@ -80,10 +84,28 @@
 
 
 @media screen and (min-width: 1024px) {
-  
     .page {
-      width: 36%;
+      width: 60%;
       margin-left: 9rem;
     }
   }
   
+@media screen and (min-width: 1400px) {
+  .page {
+    width: 50%;
+    margin-left: 9rem;
+  }
+
+  .tittle {
+    font-weight: bold;
+    font-size: 56px;
+    text-align: start;
+    
+  }
+  .subtitle {
+    font-size: 24px;
+    font-weight: medium;
+    color: #918f8f;
+  
+  }
+}

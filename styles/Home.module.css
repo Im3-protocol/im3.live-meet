@@ -52,11 +52,50 @@
 }
 
 
-
 @media only screen and (min-width: 320px) {
   .bg {
     background-size: inherit;
-    background-position: 85% 100%;
+    background-position: 75% 100%;
+  }
+  .bg2{
+    background: none;
+  }
+  .bg2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../public/images/enterRoom/Graph2.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.5; 
+    filter: blur(1px); 
+    z-index: -1; 
+  }
+}
+
+@media screen and (min-width: 375px) {
+  .bg {
+    background-position: 70% 100%;
+  }
+  .bg2{
+    background: none;
+  }
+  .bg2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../public/images/enterRoom/Graph2.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.5; 
+    filter: blur(1px); 
+    z-index: -1; 
   }
 }
 
@@ -64,5 +103,18 @@
   .bg {
     background-size: contain;
     background-position: 100% 100%;
+  }
+  .bg2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../public/images/enterRoom/Graph2.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 1; 
+    z-index: -1; 
   }
 }
