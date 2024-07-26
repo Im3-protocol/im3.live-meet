@@ -6,7 +6,7 @@
     justify-items: center;
     gap: .5rem;
     background-color: #111;
-    border: 1 white;
+    border: solid 2px white;
     border-radius: 16px;
     height: 3.6rem;
     width: 14rem;
@@ -21,4 +21,22 @@
     background-image: url('../public/images/enterRoom/GrapthBG.svg');
     background-size: cover;
     border:solid 2px #91864c;
+}
+
+@media screen and (min-width: 1200px) {
+    .btn{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        justify-items: center;
+        gap: .5rem;
+        background-color: #111;
+        border: solid 2px white;
+        border-radius: 16px;
+        height: 4rem;
+        width: 16rem;
+        margin-top: 1.6rem;
+        font-weight: bold;
+    }
 }
