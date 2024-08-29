@@ -20,7 +20,7 @@ const EnterRoom = () => {
             <div className={`${styles.page}`}>
                 <h1 className={styles.tittle}>Video Calls and Meetings via a  <span className={`${styles.gradient}`}>Decentralized</span> Public Network </h1>
                 <p className={styles.subtitle}>Connect with your web3 identity, mint NFTs and POAPs, and more.</p>
-                <div className=" flex justify-start flex-row gap-6 pt-8">
+                <div className=" flex justify-start md:flex-row flex-col gap-6 pt-8">
                     <EnterRoomButton tittle={"Enter a new Meeting"} icon={RecorderIcon} type={"meet"} />
                     <EnterRoomButton tittle={"Enter a new Space"} icon={RecorderIcon} type={"space"} />
                 </div>

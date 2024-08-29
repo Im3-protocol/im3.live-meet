@@ -32,7 +32,7 @@ const EnterRoomButton = ({tittle, icon, type}: startMeetingButtonTypes) => {
     };
 
     return(
-        <button className={styles.btn} onClick={ () => startMeeting(type) } >
+        <button className={`${styles.btn} md:mt-6`} onClick={ () => startMeeting(type) } >
             <Image
                 src={icon}
                 width={24}
