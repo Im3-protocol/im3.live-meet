@@ -32,6 +32,10 @@
   -webkit-text-fill-color: transparent;
 }
 
+.secondaryTextColor {
+  color: #A086FF;
+}
+
 /*Media Query for responsive*/
 @media screen and (min-width: 320px) {
   .tittle {
