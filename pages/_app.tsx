@@ -5,6 +5,7 @@ import '@livekit/components-styles/prefabs';
 import '@rainbow-me/rainbowkit/styles.css';
 import { DefaultSeo } from 'next-seo';
 import WagmiConfigRoot from '../components/WagmiRoot';
+import React from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -20,10 +21,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           cardType: 'summary_large_image',
         }}
         openGraph={{
-          url: 'https://meet.im3.live',
+          url: 'https://Meet.im3.live',
           images: [
             {
-              url: 'https://meet.im3.live/images/im3.svg',
+              url: 'https://Meet.im3.live/images/im3.svg',
               width: 2000,
               height: 1000,
               type: 'image/png',
@@ -40,16 +41,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         additionalLinkTags={[
           {
             rel: 'icon',
-            href: '/images/im3.svg',
+            href: '/images/enterRoom/favicon_logo.svg',
           },
           {
             rel: 'apple-touch-icon',
-            href: '/images/im3.svg',
+            href: '/images/enterRoom/favicon_logo.svg',
             sizes: '180x180',
           },
           {
             rel: 'mask-icon',
-            href: '/images/im3.svg',
+            href: '/images/enterRoom/favicon_logo.svg',
             color: '#070707',
           },
         ]}
