@@ -25,6 +25,23 @@ main {
   margin: 0px;
 }
 
+/*Fonts*/
+@font-face {
+  font-family: 'SpaceGrotesk-Regular';
+  src: url('../public/fonts/SpaceGrotesk-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito-Regular';
+  src: url('../public/fonts/Nunito-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
 .header {
   max-width: 500px;
   padding-inline: 2rem;
@@ -76,5 +93,97 @@ h2 a {
 
 .join-as-guest-button {
   cursor: pointer;
-  margin-left: 15px;
+}
+
+.lk-video-conference {
+  height: 90% !important;
+}
+
+/* .lk-room-container{
+  display: grid;
+}
+
+.lk-room-container > div{
+  grid-row-start: 1;
+} */
+
+/*video conferance*/
+.lk-video-conference {
+  /* min-width: 80% !important; */
+  height: 92% !important;
+}
+
+.lk-video-conference .lk-grid-layout-wrapper {
+  height: -webkit-fill-available;
+}
+/*control bar*/
+
+.lk-video-conference .lk-control-bar {
+  /* min-width: 80% !important; */
+  display: none !important;
+}
+
+@media screen and (max-width: 700px) {
+  .lk-chat {
+    left: 0 !important;
+    width: 100% !important;
+    /* position: absolute; */
+    right: 0 !important;
+    z-index: 50 !important;
+    bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .lk-video-conference .lk-control-bar {
+    display: flex !important;
+  }
+  .custom-controlBar {
+    display: none !important;
+  }
+  .customChat {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .lk-video-conference .lk-control-bar {
+    /* min-width: 80% !important; */
+    display: none !important;
+  }
+  .custom-controlBar {
+    display: flex !important;
+  }
+}
+
+.bg-box-space {
+  background: hsla(0, 0%, 84%, 0.3);
+
+  background: linear-gradient(0deg, hsla(0, 0%, 84%, 0.3) 0%, hsla(0, 2%, 60%, 0.3) 100%);
+
+  background: -moz-linear-gradient(0deg, hsla(0, 0%, 84%, 0.3) 0%, hsla(0, 2%, 60%, 0.3) 100%);
+
+  background: -webkit-linear-gradient(0deg, hsla(0, 0%, 84%, 0.3) 0%, hsla(0, 2%, 60%, 0.3) 100%);
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#D5D5D5", endColorstr="#9C9898", GradientType=1 );
+}
+
+.lk-prejoin {
+  background-color: transparent !important;
+}
+
+.lk-video-container,
+.lk-camera-off-note {
+  background-color: rgba(156, 152, 152, 0.15) !important;
+}
+
+.lk-video-container {
+  border: 1px solid rgba(244, 244, 244, 0.5);
+}
+
+.lk-button,
+.lk-form-control,
+.checkBox_btn__9Ku9S,
+.checkBox_guest__GdlpE > p {
+  font-family: 'Nunito-Regular' !important;
 }
