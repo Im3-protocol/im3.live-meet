@@ -137,12 +137,12 @@ h2 a {
   .lk-video-conference .lk-control-bar {
     display: flex !important;
   }
-  .custom-controlBar {
+  /* .custom-controlBar {
     display: none !important;
   }
   .customChat {
     display: none !important;
-  }
+  } */
 }
 
 @media screen and (max-width: 320px) {
@@ -150,9 +150,9 @@ h2 a {
     /* min-width: 80% !important; */
     display: none !important;
   }
-  .custom-controlBar {
+  /* .custom-controlBar {
     display: flex !important;
-  }
+  } */
 }
 
 .bg-box-space {
