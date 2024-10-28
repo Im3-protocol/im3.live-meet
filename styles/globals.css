@@ -118,10 +118,9 @@ h2 a {
 }
 /*control bar*/
 
-.lk-video-conference .lk-control-bar {
-  /* min-width: 80% !important; */
+/* .lk-video-conference .lk-control-bar {
   display: none !important;
-}
+} */
 
 @media screen and (max-width: 700px) {
   .lk-chat {
