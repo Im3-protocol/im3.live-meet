@@ -22,7 +22,7 @@ const EnterRoomButton = ({ variation }: EnterRoomButtonType) => {
 
     return (
         <button
-            className={`${variation === 'solid' ? 'bg-white w-48 md:w-[272px]' : 'w-44 md:w-[245px]'} flex md:h-[60px] md:py-6 py-3.5 md:px-8 justify-center items-center rounded-[32px] border border-[#F4F4F4] gap-[10px] hover:border-im3Red duration-200 delay-300`}
+            className={`${variation === 'solid' ? 'bg-white w-48 md:w-[272px]' : 'hover:border-im3Red w-44 md:w-[245px]'} flex md:h-[60px] md:py-6 py-3.5 md:px-8 justify-center items-center rounded-[32px] border border-[#F4F4F4] gap-[10px]  duration-200 delay-300`}
             onClick={() => startMeeting(variation === 'solid' ? 'meet' : 'space')}
         >
             <Image
