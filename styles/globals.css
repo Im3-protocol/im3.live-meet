@@ -110,7 +110,7 @@ h2 a {
 /*video conferance*/
 .lk-video-conference {
   /* min-width: 80% !important; */
-  height: 92% !important;
+  height: 100% !important;
 }
 
 .lk-video-conference .lk-grid-layout-wrapper {
