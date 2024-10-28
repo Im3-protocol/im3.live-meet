@@ -99,7 +99,7 @@ const Home = ({ tabIndex }: InferGetServerSidePropsType<typeof getServerSideProp
   }
   return (
     <>
-      <main data-lk-theme="default" className={`${styles.bg}`}>
+      <main data-lk-theme="default" className={`${styles.bg} !bg-im3Black`}>
         {/* <div className="header">
           <img src="/images/im3.svg" alt="LiveKit Meet" width="400" height="300" />
         </div> */}
