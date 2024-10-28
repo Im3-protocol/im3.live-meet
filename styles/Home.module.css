@@ -39,18 +39,37 @@
 }
 
 .bg {
-  background-image: url('../public/images/enterRoom/GrapthBG.svg');
+  background-image: url('../public/images/enterRoom/graph.svg');
+  background-size: cover;
   background-repeat: no-repeat;
   z-index: -1;
 }
 
 .bg2{
   background-image: url('../public/images/enterRoom/Graph2.svg');
-  background-size: contain;
   background-repeat: no-repeat;
   z-index: -1;
 }
 
+.participantButton{
+  opacity: 1; 
+  background-color: #111;
+  z-index: 10; 
+  width: 20%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.roomSection{
+  padding: 1rem;
+  height: 90%;
+  width: 100%;
+  display: flex;
+  justify-self: center;
+  background-color: black;
+}
 
 @media only screen and (min-width: 320px) {
   .bg {
@@ -101,7 +120,6 @@
 
 @media only screen and (min-width: 780px) {
   .bg {
-    background-size: contain;
     background-position: 100% 100%;
   }
   .bg2::before {
@@ -118,3 +136,4 @@
     z-index: -1; 
   }
 }
+
