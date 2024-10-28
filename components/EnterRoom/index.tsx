@@ -6,8 +6,8 @@ import Logo from "../../public/images/im3.svg"
 
 const EnterRoom = () => {
     return(
-        <section className="flex flex-col justify-center xl:items-start lg:mx-40 md:gap-60 gap-36">
-            <div className={`${styles.logo} md:mx-12 mt-6 ml-10 lg:ml-0`}>
+        <section className="flex flex-col justify-center md:items-start lg:mx-40 md:gap-60 gap-36">
+            <div className={`${styles.logo} lg:mx-0 md:mx-12 mt-6`}>
                 <Image
                 className="xl:w-[142px] z-[20px] w-[100px]"
                     src={Logo}
