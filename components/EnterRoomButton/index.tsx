@@ -9,18 +9,23 @@ import { EnterRoomButtonType } from "../../lib/types";
 
 const EnterRoomButton = ({variation}: EnterRoomButtonType) => {
     const router = useRouter();
-const [e2ee, setE2ee] = useState(false);
+    const [e2ee, setE2ee] = useState(false);
     const [sharedPassphrase, setSharedPassphrase] = useState(randomString(64));
 
-    const configData = useGetConfigData();
-
-    const startMeeting = () => {
-        const slug = configData?.slug || generateRoomId();
-        if (e2ee) {
-            router.push(`/rooms/${slug}/${encodePassphrase(sharedPassphrase)}`);
-        } else {
-            router.push(`/rooms/${slug}`);
-        }
+    const startMeeting = (type: any) => {
+    if ( e2ee && type === 'meet' ) {
+        router.push(`/rooms/${generateRoomId()}#${encodePassphrase(sharedPassphrase)}`);
+    }
+    if ( type === 'meet' ) {
+        router.push(`/rooms/${generateRoomId()}`);
+    }
+    // /space.im3.live
+    if ( e2ee && type === 'space' ) {
+        window.location.href = "https://www.space.im3.live/rooms/${generateRoomId()}#${encodePassphrase(sharedPassphrase)}";
+    }
+    if ( type === 'space' ) {
+        window.location.href = `https://space.im3.live/rooms/${generateRoomId()}`;
+    }
     };
 
     return (
